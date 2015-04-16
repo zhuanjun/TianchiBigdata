@@ -9,10 +9,10 @@ buy_behaviour_type = '4'
 cart_behaviour_type = '3'
 favorite_behaviour_type = '2'
 click_behaviour_type = '1'
-
+delimiter = ','
 
 def extract_user_features(train_file_path):
-    delimiter = ','
+
     train_file = open(train_file_path)
     users_features_file = open("users_featurers.csv", 'w')
 

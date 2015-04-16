@@ -13,10 +13,9 @@ buy_behaviour_type = '4'
 cart_behaviour_type = '3'
 favorite_behaviour_type = '2'
 click_behaviour_type = '1'
-
+delimiter = ','
 
 def extract_items_features(train_file_path):
-    delimiter = ','
     # 按商品id排序
     generate_sortedfile_byitem(train_file_path, "sorted_by_item-" + train_file_path)
 

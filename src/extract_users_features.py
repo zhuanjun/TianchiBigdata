@@ -1,17 +1,15 @@
 # coding=utf-8
 __author__ = 'jinyu'
 
-# user
-# buy_times, cart_times, favorite_times, click_times, buy_brands_count, cart_brands_count, favorite_brands_count, click_brands_count, active_days_count, buy_days_count
-
 import os
 import types
 
 days = 29
-buy_behaviour_click = '4'
-cart_behaviour_click = '3'
-favorite_behaviour_click = '2'
-click_behaviour_click = '1'
+buy_behaviour_type = '4'
+cart_behaviour_type = '3'
+favorite_behaviour_type = '2'
+click_behaviour_type = '1'
+
 
 def extract_user_features(train_file_path):
     delimiter = ','
@@ -42,17 +40,17 @@ def extract_user_features(train_file_path):
             user_features = initial_user_features(user_features)    # 初始化置空user_features
 
         user_features['active_days_list'].append(time)
-        if behavior_type == buy_behaviour_click:
+        if behavior_type == buy_behaviour_type:
             user_features['buy_times'] += 1
             user_features['buy_brands_list'].append(item_id)
             user_features['buy_days_list'].append(time)
-        elif behavior_type == cart_behaviour_click:
+        elif behavior_type == cart_behaviour_type:
             user_features['cart_times'] += 1
             user_features['cart_brands_list'].append(item_id)
-        elif behavior_type == favorite_behaviour_click:
+        elif behavior_type == favorite_behaviour_type:
             user_features['favorite_times'] += 1
             user_features['favorite_brands_list'].append(item_id)
-        elif behavior_type == click_behaviour_click:
+        elif behavior_type == click_behaviour_type:
             user_features['click_times'] += 1
             user_features['click_brands_list'].append(item_id)
         else:
@@ -60,8 +58,9 @@ def extract_user_features(train_file_path):
 
         pre_user_id = user_id
 
-    print user_features # 输出最后一个user_features到文件并重新初始化user_features
+
     user_features = get_other_basic_user_features(user_features)
+    print user_features # 输出最后一个user_features到文件并重新初始化user_features
     users_features_file.write(pre_user_id + "," + get_user_features_str(user_features) + "\n")
 
     users_features_file.close()

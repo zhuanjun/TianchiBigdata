@@ -14,7 +14,8 @@ delimiter = ','
 def extract_user_features(train_file_path):
 
     train_file = open(train_file_path)
-    users_features_file = open("users_featurers.csv", 'w')
+    user_features_file = open("users_featurers.csv", 'w')
+    user_features_for_uipair_file = open("user_features_for_uipair.csv", 'w')
 
     user_features={'buy_times': 0.0,                 # 购买量
                    'cart_times': 0.0,                # 购物车量
@@ -36,7 +37,9 @@ def extract_user_features(train_file_path):
         # 如果当前pre_user_id和读取到的user_id不一样则输出当前user_features并置空
         if not user_id == pre_user_id:
             user_features = get_other_basic_user_features(user_features)    # 获取用户其他特征
-            users_features_file.write(pre_user_id + "," + get_user_features_str(user_features) + "\n")  # 输出当前user_features
+            user_features_file.write(pre_user_id + "," + get_user_features_str(user_features) + "\n")  # 输出当前user_features
+            user_features_for_uipair_file.write(pre_user_id + "," + get_user_features_for_uipair_str(user_features) + '\n')
+
             user_features = initial_user_features(user_features)    # 初始化置空user_features
 
         user_features['active_days_list'].append(time)
@@ -58,12 +61,13 @@ def extract_user_features(train_file_path):
 
         pre_user_id = user_id
 
-
     user_features = get_other_basic_user_features(user_features)
     print user_features # 输出最后一个user_features到文件并重新初始化user_features
-    users_features_file.write(pre_user_id + "," + get_user_features_str(user_features) + "\n")
+    user_features_file.write(pre_user_id + "," + get_user_features_str(user_features) + "\n")
+    user_features_for_uipair_file.write(pre_user_id + "," + get_user_features_for_uipair_str(user_features) + '\n')
 
-    users_features_file.close()
+    user_features_file.close()
+    user_features_for_uipair_file.close()
     train_file.close()
 
 
@@ -111,13 +115,20 @@ def get_user_features_str(user_features):
     for k, v in user_features.iteritems():
         if type(v) is not types.ListType:
             user_features_str += str(v) + ','
+
     return user_features_str
 
 
+def get_user_features_for_uipair_str(user_features):
+    user_features_for_uipair_str = str(user_features["buy_times"]) + "," \
+                                   + str(user_features["active_days_count"]) + "," \
+                                   + str(user_features["buy_days_count"]) + ","
+
+    return user_features_for_uipair_str
 
 path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))+'\\source'
 os.chdir(path)  ## change dir to '~/files'
-train_file_path = "t_train.csv"
+train_file_path = "train_filtered_unknownitem_tianchi_mobile_recommend_train_user.csv"
 extract_user_features(train_file_path)
 
 
